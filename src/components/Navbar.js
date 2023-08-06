@@ -147,31 +147,6 @@ const Navbar = () => {
               )}
             </NavLink>
 
-            {!currentUser.user && (
-              <NavLink
-                to="/login"
-                className={`text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium ${
-                  location.pathname === "/login" ? "bg-gray-700" : ""
-                }`}
-              >
-                Login
-              </NavLink>
-            )}
-            {currentUser && currentUser?.user && (
-              <motion.span
-                whileTap={{ scale: 0.5 }}
-                onClick={handleToggle}
-                to="/addproduct"
-                className={`text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium   
-              }`}
-              >
-                <img
-                  src={currentUser?.user?.dp || avatar}
-                  alt={currentUser?.user?.name}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              </motion.span>
-            )}
             {isDropdownOpen && (
               <motion.ul
                 initial={{ opacity: 0, scale: 0.5 }}
@@ -225,6 +200,71 @@ const Navbar = () => {
               </motion.ul>
             )}
           </div>
+          {currentUser && currentUser?.user && (
+            <motion.span
+              onClick={handleToggle}
+              className={`md:hidden text-gray-300 w-fit hover:text-white block px-3 py-2 rounded-md text-base font-medium   
+              }`}
+            >
+              <img
+                src={currentUser?.user?.dp || avatar}
+                alt={currentUser?.user?.name}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            </motion.span>
+          )}
+           {isDropdownOpen && (
+              <motion.ul
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                className="absolute top-14 right-16 py-2 w-40 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                ref={dropdownRef}
+              >
+                <li className="py-2 px-4 hover:bg-gray-100">
+                  <NavLink
+                    to={`/profile/${currentUser?.user._id}`}
+                    className="block text-gray-700"
+                    onClick={handleToggle}
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-100">
+                  <NavLink
+                    to={`/myorders/${currentUser?.user._id}`}
+                    className="block text-gray-700"
+                    onClick={handleToggle}
+                  >
+                    Orders
+                  </NavLink>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-100">
+                  <NavLink
+                    to={`/wishlist/${currentUser?.user._id}`}
+                    className="block text-gray-700"
+                    onClick={handleToggle}
+                  >
+                    Wishlists
+                  </NavLink>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-100">
+                  <NavLink
+                    to={`/messenger`}
+                    className="block text-gray-700"
+                    onClick={handleToggle}
+                  >
+                    Messenger
+                  </NavLink>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-100">
+                  <button onClick={logoutUser} className="block text-gray-700">
+                    Logout
+                  </button>
+                </li>
+              </motion.ul>
+            )}
           <div className="md:hidden">
             <button
               type="button"
@@ -236,6 +276,8 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+
 
       {isOpen && (
         <motion.div
@@ -285,6 +327,18 @@ const Navbar = () => {
                 </span>
               )}
             </NavLink>
+            {!currentUser.user && (
+              <NavLink
+                to="/login"
+                className={`text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium ${
+                  location.pathname === "/login" ? "bg-gray-700" : ""
+                }`}
+              >
+                Login
+              </NavLink>
+            )}
+
+           
           </div>
         </motion.div>
       )}
