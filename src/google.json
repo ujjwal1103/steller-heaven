@@ -1,0 +1,16 @@
+{
+    "web": {
+        "client_id": "56977157268-66cebv9ght0mmirer6v59o0c03csa5us.apps.googleusercontent.com",
+        "project_id": "beaming-gadget-346305",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "http://localhost:3000/"
+        ],
+        "javascript_origins": [
+            "http://localhost:3000"
+        ]
+    }
+}
