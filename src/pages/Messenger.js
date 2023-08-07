@@ -18,7 +18,6 @@ import ConversationUsers from "../components/ConversationUsers";
 import Chat from "../components/Chat";
 import { FaPlus } from "react-icons/fa";
 
-
 const LazySingleConversation = React.lazy(() =>
   import("../components/SingleConversation")
 );
@@ -61,21 +60,19 @@ const Messenger = () => {
         dispatch(setConversation(res.data.conversations[0]));
         setCurrentConversation(res.data.conversations[0]);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
     <div className="h-page bg-gray-200  flex overflow-hidden">
-      <div className="w-96 bg-gray-50 flex flex-col h-full shadow-lg relative">
+      <div className="lg:w-96 w-24 bg-gray-50 lg:flex flex-col h-full shadow-lg relative ">
         <div className="flex p-4 gap-4 items-center text-2xl font-bold">
           <img
             src={user?.dp}
             alt=""
             className="w-12 h-12 rounded-full object-cover"
           />
-          <span>{user?.name}</span>
+          <span className="hidden lg:block">{user?.name}</span>
         </div>
         {!newConversation && (
           <div className="w-16 h-16 bg-gray-50 border-2 hover:bg-gray-200 rounded-full  flex items-center justify-center  absolute outline-2 bottom-20 z-10 -right-8 ring-2 ring-offset-2 ">
@@ -86,7 +83,7 @@ const Messenger = () => {
             />
           </div>
         )}
-        <div className="p-2">
+        <div className="p-2 hidden lg:block">
           <input
             type="search"
             // onChange={handleChange}
@@ -109,7 +106,6 @@ const Messenger = () => {
                   user?._id
                 )}
                 messageReceived={messageReceived}
-                
               />
             </Suspense>
           ))}

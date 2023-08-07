@@ -14,8 +14,8 @@ import { toast } from "react-toastify";
 import { IoMdNotificationsOutline } from "react-icons/io";
 // import Notifications from "./Notifications";
 import { socket } from "../socket";
-import { useClickOutside } from "@react-hookz/web";
-import { clsx } from "clsx";
+
+import NavDropdown from "./NavDropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,6 @@ const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const currentUser = getCurrentUser() || "";
-  const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (socket) {
@@ -59,8 +58,6 @@ const Navbar = () => {
     }
   };
 
-  useClickOutside(dropdownRef, handleToggle);
-
   const logoutUser = async () => {
     await signOut(auth);
     dispatch(logout());
@@ -79,21 +76,41 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-gray-800 text-white px-4 py-2 sticky top-0 z-10">
-      <div className=" lg:mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-gray-800 z-50 text-white px-4 py-2 sticky top-0 ">
+      <div className=" lg:mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center w-200">
+          <div className="flex items-center gap-5  ">
+            {currentUser && currentUser?.user && (
+              <motion.span
+                onClick={handleToggle}
+                className={`md:hidden text-gray-300 lg:hidden hover:text-white  p-3 rounded-md text-base font-medium   
+              }`}
+              >
+                <img
+                  src={currentUser?.user?.dp || avatar}
+                  alt={currentUser?.user?.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+              </motion.span>
+            )}
+            {isDropdownOpen && (
+              <NavDropdown
+                userId={currentUser?.user?._id}
+                handleToggle={handleToggle}
+                logoutUser={logoutUser}
+              />
+            )}
             <NavLink
               to="/"
-              className="text-white overflow-hidden w-auto h-10 text-2xl font-bold"
+              className="text-white w-52 lg:w-80  pr-5 text-2xl font-bold"
             >
               <img src={logo} alt="" className="w-full h-full object-cover" />
             </NavLink>
           </div>
 
           <div className="hidden md:flex gap-5 items-center lg:w-3/4 lg:justify-end">
-            <div className="relative w-1/2 mr-4">
-              <form className="w-full" onSubmit={handleSearchSubmit}>
+            <div className=" w-1/2 mr-4">
+              <form className="w-full relative" onSubmit={handleSearchSubmit}>
                 <input
                   type="text"
                   placeholder="Search products..."
@@ -109,29 +126,6 @@ const Navbar = () => {
                 </button>
               </form>
             </div>
-            {/* <div
-              onClick={() => setIsOpenNoty((prev) => !prev)}
-              className={`text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium relative ${
-                location.pathname === "/cart" ? "bg-gray-700" : ""
-              }`}
-            >
-              <IoMdNotificationsOutline className="inline-block mr-1 -mt-1" />
-
-              {notifications.length > 0 && (
-                <span className="bg-blue-500 text-white rounded-full absolute top-0 right-0 transform translate-x-2 -translate-y-2 px-2 py-1 text-xs">
-                  {notifications?.length}
-                </span>
-              )}
-
-              {isOpenNoty(
-                <Notifications
-                  notifications={notifications}
-                  setNotifications={setNotifications}
-                  setIsOpenNoty={setIsOpenNoty}
-                />
-              )}
-            </div> */}
-
             <NavLink
               to="/cart"
               className={`text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium relative ${
@@ -146,130 +140,26 @@ const Navbar = () => {
                 </span>
               )}
             </NavLink>
-
-            {isDropdownOpen && (
-              <motion.ul
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                className="absolute top-14 right-16 py-2 w-40 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                ref={dropdownRef}
+            {currentUser && currentUser?.user && (
+              <motion.span
+                onClick={handleToggle}
+                className={`md:hidden hidden text-gray-300 w-fit hover:text-white lg:block px-3 py-2 rounded-md text-base font-medium   
+              }`}
               >
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/profile/${currentUser?.user._id}`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Profile
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/myorders/${currentUser?.user._id}`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Orders
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/wishlist/${currentUser?.user._id}`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Wishlists
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/messenger`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Messenger
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <button onClick={logoutUser} className="block text-gray-700">
-                    Logout
-                  </button>
-                </li>
-              </motion.ul>
+                <img
+                  src={currentUser?.user?.dp || avatar}
+                  alt={currentUser?.user?.name}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </motion.span>
             )}
           </div>
-          {currentUser && currentUser?.user && (
-            <motion.span
-              onClick={handleToggle}
-              className={`md:hidden text-gray-300 w-fit hover:text-white block px-3 py-2 rounded-md text-base font-medium   
-              }`}
-            >
-              <img
-                src={currentUser?.user?.dp || avatar}
-                alt={currentUser?.user?.name}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            </motion.span>
-          )}
-           {isDropdownOpen && (
-              <motion.ul
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                className="absolute top-14 right-16 py-2 w-40 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                ref={dropdownRef}
-              >
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/profile/${currentUser?.user._id}`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Profile
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/myorders/${currentUser?.user._id}`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Orders
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/wishlist/${currentUser?.user._id}`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Wishlists
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink
-                    to={`/messenger`}
-                    className="block text-gray-700"
-                    onClick={handleToggle}
-                  >
-                    Messenger
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <button onClick={logoutUser} className="block text-gray-700">
-                    Logout
-                  </button>
-                </li>
-              </motion.ul>
-            )}
+
           <div className="md:hidden">
             <button
               type="button"
               onClick={toggleMenu}
-              className="text-gray-400 hover:text-white focus:outline-none focus:text-white"
+              className="text-gray-400  hover:text-white focus:outline-none focus:text-white"
             >
               <FiMenu className="h-6 w-6" />
             </button>
@@ -277,24 +167,22 @@ const Navbar = () => {
         </div>
       </div>
 
-
-
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           transition={{ duration: 0.3 }}
-          className="md:hidden"
+          className="md:hidden lg:hidden absolute p-4 -left-0 bg-gray-800 w-full"
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <div className="relative">
-              <form onSubmit={handleSearchSubmit}>
+            <div className=" flex items-center justify-center gap-5">
+              <form onSubmit={handleSearchSubmit} className=" w-full relative">
                 <input
                   type="text"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="w-full px-4 py-2 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full  px-4 py-2 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <button
                   type="submit"
@@ -315,7 +203,7 @@ const Navbar = () => {
 
             <NavLink
               to="/cart"
-              className={`text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium relative ${
+              className={`text-gray-300  hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium relative ${
                 location.pathname === "/cart" ? "bg-gray-700" : ""
               }`}
             >
@@ -337,8 +225,6 @@ const Navbar = () => {
                 Login
               </NavLink>
             )}
-
-           
           </div>
         </motion.div>
       )}

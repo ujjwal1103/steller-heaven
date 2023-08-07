@@ -82,14 +82,14 @@ const Profile = () => {
         </div>
         <div className="flex-grow bg-slate-100 shadow-xl">
           <ul className="p-6">
-            <li className="border-b-2 py-3">
+          { currentUser?.user?.isAdmin && <li className="border-b-2 py-3">
               <NavLink
                 to="/dashboard"
                 className="flex items-center gap-5 text-xl"
               >
                 <FaShoppingCart /> Dashboard
               </NavLink>
-            </li>
+            </li>}
             <li className="border-b-2 py-3">
               <h1 to="/myorders" className="flex items-center gap-5 text-xl">
                 <AiFillSetting /> Account Settings

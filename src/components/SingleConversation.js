@@ -43,7 +43,7 @@ const SingleConversation = ({
         alt=""
         className="w-12 h-12 rounded-full object-cover"
       />
-      <div className="flex  flex-col">
+      <div className="lg:flex  flex-col hidden ">
         <span className="font-semibold text-xl truncate">{friend?.name}</span>
         {messageReceived.conversationId === conversation._id && (
           <span className="font-semibold ">
