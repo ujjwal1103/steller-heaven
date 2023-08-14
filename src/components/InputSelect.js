@@ -12,12 +12,11 @@ const InputSelect = ({
   categoryId,
 }) => {
   const options = useFetchCategory(id, categoryId);
-  const { field, fieldState } = useController({
+  const { field } = useController({
     name: id,
     control,
     rules: { required: "Category is required" },
   });
-  console.log(fieldState);
   const handleChange = (option) => {
     field.onChange(option?.value);
   };

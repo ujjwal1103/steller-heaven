@@ -48,16 +48,21 @@ const App = () => {
           <Route path="/addCategory" element={<AddSubcategoryForm />} />
           <Route path="users/editUser/:id" element={<EditUser />} />
         </Route>
+        
         <Route path="/product/:id" element={<SingleProduct />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/messenger" element={<Messenger />} />
-        <Route path="/profile/:id" element={<Profile />} />
+      
+
+
+
         <Route path="" element={<AuthProtected />}>
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/createSliderImage" element={<CreateSliderImage />} />
           <Route path="/editProduct/:id" element={<EditProduct />} />
           <Route path="/addCategory" element={<AddSubcategoryForm />} />
           <Route path="/wishlist/:id" element={<WishList />} />
+          <Route path="/messenger" element={<Messenger />} />
+        <Route path="/profile/:id" element={<Profile />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

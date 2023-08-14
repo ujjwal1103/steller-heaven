@@ -1,6 +1,6 @@
 import useFetchData from "../hooks/useFetchData";
-import { useDispatch } from "react-redux";
-import { deleteProduct } from "../redux/slices/productSlice";
+
+
 
 import { Link, NavLink } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -8,9 +8,9 @@ import { makeRequest } from "../api/makeRequest";
 import { useEffect, useState } from "react";
 
 const AllProducts = () => {
-  const { error, loading, products } = useFetchData();
+  const {  loading, products } = useFetchData();
 
-  const dispatch = useDispatch();
+
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [users, setUsers] = useState([]);

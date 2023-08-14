@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiMenu, FiSearch } from "react-icons/fi";
 import { motion } from "framer-motion";
@@ -11,16 +11,11 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase.config";
 
 import { toast } from "react-toastify";
-import { IoMdNotificationsOutline } from "react-icons/io";
-// import Notifications from "./Notifications";
-import { socket } from "../socket";
 
 import NavDropdown from "./NavDropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenNoty, setIsOpenNoty] = useState(false);
-  const [notifications, setNotifications] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const totalProducts = useSelector((state) => state.cart.totalProducts);
@@ -28,15 +23,6 @@ const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const currentUser = getCurrentUser() || "";
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("sendNotification", (data) => {
-        setNotifications((prev) => [...prev, data.notificationMessage]);
-        toast(data.notificationMessage);
-      });
-    }
-  }, []);
 
   const handleToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -143,7 +129,7 @@ const Navbar = () => {
             {currentUser && currentUser?.user && (
               <motion.span
                 onClick={handleToggle}
-                className={`md:hidden hidden text-gray-300 w-fit hover:text-white lg:block px-3 py-2 rounded-md text-base font-medium   
+                className={`  hidden text-gray-300 w-fit hover:text-white md:block lg:block px-3 py-2 rounded-md text-base font-medium   
               }`}
               >
                 <img
@@ -152,6 +138,16 @@ const Navbar = () => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
               </motion.span>
+            )}
+            {!currentUser.user && (
+              <NavLink
+                to="/login"
+                className={`text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium ${
+                  location.pathname === "/login" ? "bg-gray-700" : ""
+                }`}
+              >
+                Login
+              </NavLink>
             )}
           </div>
 

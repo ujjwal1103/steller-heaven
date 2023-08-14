@@ -7,7 +7,7 @@ function ColorInput({ register, control, error, maxColors, label }) {
     name: "colors",
     keyName: "id",
   });
-  console.log(error);
+  
   return (
     <div className="flex flex-col p-5 lg:flex-grow  flex-grow w-full lg:w-auto">
       <label className="w-full mb-3">{label}</label>

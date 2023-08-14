@@ -12,7 +12,6 @@ import ColorInput from "../components/ColorInput";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
-  const [clear, setClear] = useState(false);
   const [previewUrls, setPreviewUrls] = useState([]);
   const navigate = useNavigate();
   const {
@@ -62,7 +61,6 @@ const AddProduct = () => {
     reset();
     setValue("subcategory", null);
     setValue("category", null);
-    setClear(true);
     setPreviewUrls([]);
   };
 

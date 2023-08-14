@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+
 import React, { useEffect } from "react";
 import { useForm, useController } from "react-hook-form";
 import Select from "react-select";

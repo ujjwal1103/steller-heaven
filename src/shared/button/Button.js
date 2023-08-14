@@ -4,14 +4,14 @@ import clsx from "clsx";
 import { CgSpinner } from "react-icons/cg";
 const Button = ({
   text,
-  icon, // Accept the "icon" prop from the parent
+  icon,
   onClick,
   disabled,
   className,
   type,
   isLoading,
   disabledStyles,
-  style, // Accept the "style" prop from the parent
+  style,
 }) => {
   const classNames = clsx(className, { [disabledStyles]: disabled });
 
@@ -21,7 +21,7 @@ const Button = ({
       className={classNames}
       onClick={!isLoading ? onClick : null}
       disabled={disabled}
-      style={style} // Apply the custom styles from the parent
+      style={style}
     >
       {isLoading ? (
         <>

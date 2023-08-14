@@ -1,4 +1,3 @@
-import { useClickOutside } from "@react-hookz/web";
 import { useRef } from "react";
 
 const Notifications = ({ notifications, setNotifications }) => {

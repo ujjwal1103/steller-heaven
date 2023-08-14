@@ -1,8 +1,7 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense, useCallback } from "react";
 
 import { makeRequest } from "../api/makeRequest";
 import { getCurrentUser } from "../utils/getUser";
-import avatar from "../assets/avatar.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setConversation,
@@ -26,7 +25,7 @@ const Messenger = () => {
   const { user } = getCurrentUser();
   const [currentConversation, setCurrentConversation] = useState(null);
   const [newConversation, setNewConversation] = useState(false);
-
+  const [error, setError] = useState("");
   const [messageReceived, setMessageReceived] = useState("");
 
   const dispatch = useDispatch();
@@ -35,9 +34,23 @@ const Messenger = () => {
     (state) => state.messenger
   );
 
+  const getConversations = useCallback(async () => {
+    try {
+      const res = await makeRequest.get("conversations");
+      if (res.data.isSuccess) {
+        dispatch(setConversations(res.data.conversations));
+        dispatch(setConversation(res.data.conversations[0]));
+        setCurrentConversation(res.data.conversations[0]);
+        setError("");
+      }
+    } catch (error) {
+      setError(error.response.data.message || error.message);
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     getConversations();
-  }, [dispatch, messageReceived]);
+  }, [getConversations, messageReceived]);
 
   useEffect(() => {
     if (socket) {
@@ -51,17 +64,7 @@ const Messenger = () => {
         getConversations();
       });
     }
-  }, []);
-  const getConversations = async () => {
-    try {
-      const res = await makeRequest.get(`conversations/${user?._id}`);
-      if (res.data.isSuccess) {
-        dispatch(setConversations(res.data.conversations));
-        dispatch(setConversation(res.data.conversations[0]));
-        setCurrentConversation(res.data.conversations[0]);
-      }
-    } catch (error) {}
-  };
+  }, [getConversations, dispatch, user]);
 
   return (
     <div className="h-page bg-gray-200  flex overflow-hidden">
@@ -83,15 +86,19 @@ const Messenger = () => {
             />
           </div>
         )}
-        <div className="p-2 hidden lg:block">
-          <input
-            type="search"
-            // onChange={handleChange}
-            className="border-b-2 p-2 w-full outline-none"
-            placeholder="search conversation"
-            disabled={conversations.length === 0}
-          />
-        </div>
+        {error ? (
+          <h1 className="text-center p-4 font-bold">{error}</h1>
+        ) : (
+          <div className="p-2 hidden lg:block">
+            <input
+              type="search"
+              // onChange={handleChange}
+              className="border-b-2 p-2 w-full outline-none"
+              placeholder="search conversation"
+              disabled={conversations.length === 0}
+            />
+          </div>
+        )}
         <div className="p-4 flex flex-col gap-5 overflow-y-scroll  scrollbar-none">
           {conversations?.map((p) => (
             <Suspense fallback={<div>Loading...</div>}>
@@ -106,6 +113,7 @@ const Messenger = () => {
                   user?._id
                 )}
                 messageReceived={messageReceived}
+                socket={socket}
               />
             </Suspense>
           ))}

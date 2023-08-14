@@ -1,10 +1,10 @@
-
-
 export const getCurrentUser = () => {
-    const user = {
-        user : JSON.parse(localStorage.getItem('user')),
-        token: localStorage.getItem('token')
-    }
+  const currenUser = localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"))  ;
 
-    return user.user && user;
-}
+  const user = {
+    user: currenUser?.user,
+    token: currenUser?.token,
+  };
+
+  return user.user && user;
+};

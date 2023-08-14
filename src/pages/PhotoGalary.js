@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { storage } from "../firebase.config";
-import { getDownloadURL, ref, listAll, deleteObject } from "firebase/storage";
+import { getDownloadURL, ref, listAll } from "firebase/storage";
 import { useState } from "react";
 import Button from "../shared/button/Button";
 

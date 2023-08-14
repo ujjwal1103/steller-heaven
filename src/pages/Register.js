@@ -22,10 +22,10 @@ const Register = () => {
   } = useForm({
     mode: "onBlur",
     defaultValues: {
-      email: "ujjwallade11@gmail.com",
-      password: "India@123",
-      confirmPassword: "India@123",
-      name: "ujjwal",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
     },
   });
 

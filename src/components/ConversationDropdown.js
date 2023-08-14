@@ -6,8 +6,7 @@ import {
   setFriend,
   setMessages,
 } from "../redux/slices/messengerSlice";
-
-// import useClickOutside from "../hooks/useClickOutSide";
+import { findFriend } from "../utils/findFriend";
 import { motion } from "framer-motion";
 import { useClickOutside } from "@react-hookz/web";
 const ConversationDropdown = ({
@@ -22,13 +21,13 @@ const ConversationDropdown = ({
 
   const handleDeleteMessages = async () => {
     try {
-      const res = await makeRequest.delete(`messages/${conversationId}`);
-      if (res.data.isSuccess) {
+      const {data} = await makeRequest.delete(`messages/${conversationId}`);
+      if (data.isSuccess) {
         dispatch(setMessages([]));
-
         setClose(false);
       }
     } catch (error) {
+      setClose(false);
       console.log(error);
     }
   };
@@ -39,9 +38,9 @@ const ConversationDropdown = ({
 
   useEffect(() => {
     setCurrentConversation(conversation);
-    const friend = conversation?.participants?.find((pa) => pa?._id !== userId);
+    const friend = findFriend(conversation?.participants, userId);
     dispatch(setFriend(friend));
-  }, [conversation, dispatch]);
+  }, [conversation, dispatch, setCurrentConversation, userId]);
 
   const handleDeleteConversation = async () => {
     try {

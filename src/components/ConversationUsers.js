@@ -23,7 +23,7 @@ const ConversationUsers = ({
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const res = await makeRequest.get(`conversation/users/${userId}`);
+        const res = await makeRequest.get(`conversation/users`);
         setUsers(res.data.users);
       } catch (error) {
         console.log(error);
@@ -35,7 +35,7 @@ const ConversationUsers = ({
   const handleChange = async (e) => {
     try {
       const res = await makeRequest.get(
-        `conversation/users/${userId}?search=${e.target.value}`
+        `conversation/users?search=${e.target.value}`
       );
       setUsers(res.data.users);
     } catch (error) {
@@ -49,9 +49,7 @@ const ConversationUsers = ({
 
   const handleConversation = async (id) => {
     try {
-      const { data } = await makeRequest.post("conversation", {
-        participants: [userId, id],
-      });
+      const { data } = await makeRequest.post(`conversation/${id}`);
       if (data?.isSuccess) {
         console.log(data);
         dispatch(setFriend(findFriend(data.conversation.participants, userId)));
@@ -69,7 +67,7 @@ const ConversationUsers = ({
       initial={{ opacity: 0, x: "-90vw" }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay: 0.3, ease: easeIn }}
-      exit={{ opacity: 0.4,  y: "-90vh" }}
+      exit={{ opacity: 0.4, y: "-90vh" }}
       className="absolute overflow-hidden transition-all duration-700 bg-gray-50 shadow-md w-96 h-page right-0"
       ref={ref}
     >
@@ -82,7 +80,7 @@ const ConversationUsers = ({
         />
       </div>
       <div className="p-2 flex flex-col gap-5 scrollbar-none overflow-y-scroll h-full pb-20">
-        <div className="flex justify-end">
+        <div className="flex justify-end ">
           <Button
             text={"close"}
             className={"border-2 p-2 bg-gray-50"}
@@ -101,7 +99,7 @@ const ConversationUsers = ({
                 handleConversation(u?._id);
               }}
               key={u?._id}
-              className="bg-gray-200 p-3 flex items-center gap-5"
+              className="bg-gray-200 cursor-pointer hover:bg-gray-300 p-3 flex items-center gap-5"
             >
               <img
                 src={u?.dp}

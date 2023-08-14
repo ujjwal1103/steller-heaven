@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { useDispatch } from "react-redux";
 
 import { makeRequest } from "../api/makeRequest";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

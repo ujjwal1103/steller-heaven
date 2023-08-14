@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 
+@layer components {
+  .btn {
+      @apply bg-slate-700 text-white;
+  } 
+}
+
+
 body{
   background-image:  url('./assets/wall2.jpg');
   background-repeat: no-repeat;

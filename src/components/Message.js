@@ -1,5 +1,6 @@
-import { format } from "timeago.js";
+import { RiCheckDoubleLine } from "react-icons/ri";
 import { containsOnlyEmojis } from "../utils/validations";
+import moment from "moment";
 const Message = ({ self, message }) => {
   return (
     <div
@@ -13,11 +14,15 @@ const Message = ({ self, message }) => {
         <span className="break-all">{message.text}</span>
       )}
       <span className="text-sm italic text-right">
-        {format(message.createdAt)}
+        {moment(message.createdAt).fromNow()}
       </span>
       {self && (
-        <span className="text-sm italic text-right">
-          {message.seen ? "yes" : "no"}
+        <span className="text-sm italic block text-right">
+          {message.seen ? (
+            <RiCheckDoubleLine className="text-sky-500" />
+          ) : (
+            <RiCheckDoubleLine />
+          )}
         </span>
       )}
     </div>

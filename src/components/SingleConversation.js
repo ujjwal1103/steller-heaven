@@ -3,12 +3,15 @@ import { setConversation, setFriend } from "../redux/slices/messengerSlice";
 import { useDispatch } from "react-redux";
 import { findFriend } from "../utils/findFriend";
 import { motion } from "framer-motion";
+import { makeRequest } from "../api/makeRequest";
+
 const SingleConversation = ({
   userId,
   onlineUsers,
   conversation,
   setCurrentConversation,
   messageReceived,
+  socket,
 }) => {
   const [isOnline, setIsOnline] = useState(false);
   const [friend, setCurrentFriend] = useState();
@@ -23,20 +26,29 @@ const SingleConversation = ({
 
   const swipeVariants = {
     initial: { y: 0 },
-    up: { y: -10 }, // Adjust this value for a more noticeable animation
+    up: { y: -10 },
+  };
+
+
+  const handleConversationClick = async () => {
+    dispatch(setFriend(findFriend(conversation?.participants, userId)));
+    dispatch(setConversation(conversation));
+    setCurrentConversation(conversation);
+    if(conversation?._id){
+      const res = await makeRequest.put("seen", {conversationId: conversation?._id});
+      console.log(res);
+    }else{
+      console.log("no")
+    }
   };
 
   return (
-    <motion.div // Wrap your component with the motion.div
+    <motion.div
       className="flex items-center gap-5  relative cursor-pointer"
       initial="initial"
-      whileHover="up" // Apply the swipe animation when hovering
+      whileHover="up"
       variants={swipeVariants}
-      onClick={() => {
-        dispatch(setFriend(findFriend(conversation?.participants, userId)));
-        dispatch(setConversation(conversation));
-        setCurrentConversation(conversation);
-      }}
+      onClick={handleConversationClick}
     >
       <img
         src={friend?.dp}

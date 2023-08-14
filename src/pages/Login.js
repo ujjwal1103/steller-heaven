@@ -27,8 +27,8 @@ const Login = () => {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      email: "ujjwallade@gmail.com",
-      password: "India@123",
+      email: process.env.REACT_APP_EMAIL || "",
+      password: process.env.REACT_APP_PASSWORD || "",
     },
   });
 
@@ -39,16 +39,13 @@ const Login = () => {
     },
     {
       onSuccess: (data) => {
-        localStorage.setItem("token", data.token);
         const payload = {
           user: data.user,
           token: data.token,
           isSuccess: data.isSuccess,
         };
         dispatch(setUser(payload));
-        localStorage.setItem("user", JSON.stringify(data.user));
         toast.success("Login successfully", toastProps);
-
         navigate("/");
       },
       onError: (error) => {

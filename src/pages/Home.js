@@ -7,32 +7,11 @@ import Footer from "../components/Footer";
 import { ProductBox } from "../components/productBox";
 
 import useFetchData from "../hooks/useFetchData";
-import { Link, useRoutes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { makeRequest } from "../api/makeRequest";
 
 const Home = () => {
-  // const getProducts = async () => {
-  //   try {
-  //     const res = await makeRequest.get("products");
-  //     return res.data;
-  //   } catch (error) {
-  //     console.log("error", error.response.statusText);
-  //   }
-  // };
-  // const query = useQuery({
-  //   queryKey: ["products"],
-  //   queryFn: getProducts,
-  //   initialData: [],
-  // });
-
-  // if (query.isLoading) {
-  //   return <p>loading....</p>;
-  // }
-  // if (query.error) {
-  //   return <p>{query.error?.response?.statusText}</p>;
-  // }
-
-  const { error, loading, products } = useFetchData();
+  const { products } = useFetchData();
 
   const [categories, setCategories] = useState([]);
 

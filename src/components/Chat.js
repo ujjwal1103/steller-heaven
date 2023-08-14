@@ -5,14 +5,10 @@ import { IoMdSend } from "react-icons/io";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { makeRequest } from "../api/makeRequest";
-
 import { addMessage, setMessages } from "../redux/slices/messengerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ConversationDropdown from "./ConversationDropdown";
 import { AnimatePresence, motion } from "framer-motion";
-
-
-
 import { useClickOutside } from "@react-hookz/web";
 import { BsEmojiWink } from "react-icons/bs";
 import ProfileView from "./ProfileView";
@@ -26,7 +22,6 @@ const Chat = ({
   getConversations
 }) => {
   const emojiref = useRef();
-
   const [error, setError] = useState(null);
   const scrollref = useRef(null);
   const [currentMessage, setCurrentMessage] = useState("");
@@ -38,32 +33,32 @@ const Chat = ({
   const [actions, setActions] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  useEffect(() => {
-    setIsOnline(onlineUsers?.map((o) => o.userId).includes(friend?._id));
-  }, [onlineUsers]);
+  const {_id:friendId} = friend
 
   useEffect(() => {
-    if (messageReceived && messageReceived.sender === friend?._id) {
+    
+    if(friendId) setIsOnline(onlineUsers?.map((o) => o.userId).includes(friendId))
+  }, [onlineUsers, friendId]);
+
+  useEffect(() => {
+    if (messageReceived && messageReceived.sender === friendId) {
       dispatch(addMessage(messageReceived));
-      
-     
     }
-  }, [messageReceived, dispatch]);
+  }, [messageReceived, friendId, dispatch]);
 
   useEffect(() => {
     const getMessages = async () => {
         if(currentConversationId){
             try {
-       
-                const res = await makeRequest.get(`messages/${currentConversationId}`);
-                if (res.data.isSuccess) {
+                const {data} = await makeRequest.get(`messages/${currentConversationId}`);
+                if (data.isSuccess) {
                   setError("");
-                  dispatch(setMessages(res.data.messages));
-    
+                  
+                  dispatch(setMessages(data.messages));
                 }
               } catch (error) {
                 dispatch(setMessages([]));
-                setError(error.response.data.message);
+                setError(error?.response?.data?.message || error?.message);
                 console.log(error);
               }
         } 
@@ -91,8 +86,7 @@ const Chat = ({
         });
         if (res.data.isSuccess) {
           dispatch(addMessage(res.data.message));
-          getConversations()
-          console.log(res.data.message);
+          getConversations();
           socket.emit("sendMessage", res.data.message);
           setError("");
           setCurrentMessage("");

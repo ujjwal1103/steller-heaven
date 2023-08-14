@@ -31,7 +31,6 @@
     "socket.io-client": "^4.7.1",
     "sweetalert2": "^11.7.20",
     "tailwind-scrollbar": "^3.0.4",
-    "timeago.js": "^4.0.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

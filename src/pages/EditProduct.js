@@ -9,7 +9,6 @@ import Button from "../shared/button/Button";
 import View from "./View";
 import { FaEdit } from "react-icons/fa";
 import ImagesSelect from "../components/ImagesSelect";
-import PhotoGalary from "./PhotoGalary";
 
 const EditProduct = () => {
   const { id } = useParams();
